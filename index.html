@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/83/tic-tac-toe.png" type="image/png">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            background-color: #b3ec8d;
+            font-family: Arial, sans-serif;
+            margin: 0%;
+            padding: 0%;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .board {
+            background-color: #6dcf2b;
+            padding: auto;
+            border: 1px rgb(3, 250, 3) solid;
+            margin: 40px auto;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 10px 5px rgb(30, 224, 105) ;
+        }
+
+        .box {
+            height: 100px;
+            width: 100px;
+            background-color: rgb(248, 243, 243);
+            margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 30px;
+            border-radius: 7px ;
+            font-weight: bold;
+        }
+
+        .box:hover {
+            box-shadow: 0 0px 15px 10px rgba(17, 0, 0, 0.2);
+            cursor: pointer;
+            transition: 0.5s;
+            border-radius: 10px ;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 25px;
+        }
+
+        .reset {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #eea214;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            border-radius: 5px;
+        }
+
+        .reset:hover {
+            background-color: #87f807;
+            color: black;
+            transition: 0.5;
+        }
+            
+        @media (max-width: 768px) {
+            .board {
+                width: 90%;
+                margin: 20px auto;
+            }
+
+            .box {
+                height: 80px;
+                width: 80px;
+                font-size: 1.2em;
+            }
+
+            .title {
+                font-size: 2em;
+            }
+
+            .status {
+                font-size: 1em;
+            }
+
+            .reset {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .board {
+                width: 100%;
+                margin: 10px auto;
+                padding: 5px;
+            }
+
+            .box {
+                height: 60px;
+                width: 60px;
+                font-size: 1em;
+                margin: 3px;
+            }
+
+            .title {
+                font-size: 1.8em;
+            }
+
+            .status {
+                font-size: 0.9em;
+            }
+
+            .reset {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h1 class="title">Tic-Tac-Toe</h1>
+    <p class="status">Current Player :  <span id="currentPlayer">X</span></p>
+    <div class="board">
+        <div class="row">
+            <div class="box" onclick="selectBoxs(0)"></div>
+            <div class="box" onclick="selectBoxs(1)"></div>
+            <div class="box" onclick="selectBoxs(2)"></div>
+        </div>
+        <div class="row">
+            <div class="box" onclick="selectBoxs(3)"></div>
+            <div class="box" onclick="selectBoxs(4)"></div>
+            <div class="box" onclick="selectBoxs(5)"></div>
+        </div>
+        <div class="row">
+            <div class="box" onclick="selectBoxs(6)"></div>
+            <div class="box" onclick="selectBoxs(7)"></div>
+            <div class="box" onclick="selectBoxs(8)"></div>
+        </div>
+    </div>
+    <button class="reset" onclick="resetGame()">Reset Game</button>
+    <script>
+        const board = Array(9).fill(null);
+        let currentPlayer = "X";
+        let gameActive = true;
+
+        function renderBoard() {
+            const allBoxes = document.querySelectorAll('.box');
+            allBoxes.forEach((boxElement, i) => {
+                boxElement.textContent = board[i];});
+        }
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],
+                [1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6],
+            ];
+
+            for (let combination of winningCombinations) {
+                const [a, b, c] = combination;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];}}
+            return board.includes(null) ? null : "Draw";
+        }
+        function selectBoxs(boxNumber) {
+            if (board[boxNumber] || !gameActive) return;
+
+            board[boxNumber] = currentPlayer;
+            renderBoard();
+
+            const winner = checkWinner();
+            if (winner) {
+                gameActive = false;
+                document.querySelector('.status').textContent = winner === "Draw" ? "It's a draw!" : `Player ${winner} wins!`;
+            } else {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                document.getElementById('currentPlayer').textContent = currentPlayer;}}
+
+        function resetGame() {
+            function resetGame() {
+                board.fill(null);
+                currentPlayer = "X";
+                gameActive = true;
+                renderBoard();
+
+                document.getElementById('currentPlayer').textContent = currentPlayer;
+                document.querySelector('.status').textContent = "Current Player : X";}
+                location.reload();}
+    </script>
+</body>
+</html>
